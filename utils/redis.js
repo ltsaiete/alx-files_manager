@@ -7,7 +7,7 @@ class RedisClient {
 
 	constructor() {
 		this.#client = createClient()
-			.on('error', (error) => console.log('Error connecting to the client', error))
+			.on('error', (error) => console.log('Error connecting to Redis', error))
 			.on('ready', () => console.log('Redis client connection ready'));
 
 		this.#get = promisify(this.#client.get).bind(this.#client);
