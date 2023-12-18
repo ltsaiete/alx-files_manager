@@ -1,8 +1,7 @@
 POST http://localhost:3333/users
-
 Content-Type: application/json
 
 {
-	"email": "example@mail.com",
+	"email": "example2@mail.com",
 	"password": "123456"
 }
