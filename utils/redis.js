@@ -34,6 +34,7 @@ class RedisClient {
 	}
 
 	isAlive() {
+		console.log(this.#client.isReady);
 		return this.#connected;
 	}
 }
