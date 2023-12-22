@@ -10,15 +10,15 @@ class RedisClient {
 		// this.#connected = true;
 		this.#client = createClient()
 			.on('error', (error) => {
-				// console.log('error');
-				// console.log(error);
+				console.log(error);
 				this.#connected = false;
-				// console.log(this.#client);
 			})
 			.on('ready', () => {
 				console.log('Redis client connection ready');
 				this.#connected = true;
 			});
+
+		console.log(this.#client.connected);
 
 		this.#get = promisify(this.#client.get).bind(this.#client);
 	}
