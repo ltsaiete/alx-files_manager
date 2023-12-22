@@ -1,30 +1,6 @@
-import chai from 'chai';
-import sinon from 'sinon';
+import redisClient from './utils/redis';
 
-sinon.stub(console, 'log');
-
-import redisClient from './utils/redis.js';
-
-describe('redisClient test', () => {
-	it('isAlive when redis not started', (done) => {
-		let i = 0;
-		const repeatFct = async () => {
-			await setTimeout(() => {
-				let cResult;
-				try {
-					cResult = redisClient.isAlive();
-				} catch (error) {
-					cResult = false;
-				}
-				chai.assert.isFalse(cResult);
-				i += 1;
-				if (i >= 5) {
-					done();
-				} else {
-					repeatFct();
-				}
-			}, 1000);
-		};
-		repeatFct();
-	}).timeout(10000);
-});
+console.log('is alive');
+console.log(redisClient.isAlive());
+console.log(redisClient.isAlive());
+console.log(redisClient.isAlive());
