@@ -1,4 +1,12 @@
-POST http://localhost:3333/users
+GET http://localhost:5000/status
+
+###
+
+GET http://localhost:5000/stats
+
+###
+
+POST http://localhost:5000/users
 Content-Type: application/json
 
 {
