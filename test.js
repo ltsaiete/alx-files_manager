@@ -1,27 +1,17 @@
-import redisClient from './utils/redis';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
 
-console.log('is alive');
-console.log(redisClient.isAlive());
-// console.log(redisClient.isAlive());
-// async function waitConnection() {
-// 	return new Promise((resolve, reject) => {
-// 		let i = 0;
-// 		const repeatFct = async () => {
-// 			setTimeout(() => {
-// 				i += 1;
-// 				if (i >= 10) {
-// 					reject();
-// 				} else if (!redisClient.isAlive()) {
-// 					repeatFct();
-// 				} else {
-// 					resolve();
-// 				}
-// 			}, 1000);
-// 		};
-// 		repeatFct();
-// 	});
-// }
+chai.use(chaiHttp);
 
-// waitConnection().then(() => {
-// 	console.log(redisClient.isAlive());
-// });
+describe('GET /status', () => {
+  it('GET /status exists', (done) => {
+    chai
+      .request('http://localhost:5000')
+      .get('/status')
+      .end((err, res) => {
+        chai.expect(err).to.be.null;
+        chai.expect(res).to.have.status(200);
+        done();
+      });
+  }).timeout(30000);
+});
