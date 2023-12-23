@@ -13,8 +13,6 @@ class RedisClient {
         this.connected = true
       })
 
-    console.log(this.client.connected)
-
     this.get = promisify(this.client.get).bind(this.client)
   }
 
