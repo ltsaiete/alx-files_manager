@@ -1,18 +1,18 @@
 import 'dotenv/config';
 import { MongoClient } from 'mongodb';
+
 class DBClient {
-  static DB_HOST = process.env.DB_HOST || 'localhost';
-  static DB_PORT = process.env.DB_PORT || 27017;
-  static DB_DATABASE = process.env.DB_DATABASE || 'files_manager';
-  
   constructor() {
-    const url = `mongodb://${DBClient.DB_HOST}:${DBClient.DB_PORT}`;
+    const DB_HOST = process.env.DB_HOST || 'localhost';
+    const DB_PORT = process.env.DB_PORT || 27017;
+    const DB_DATABASE = process.env.DB_DATABASE || 'files_manager';
+    const url = `mongodb://${DB_HOST}:${DB_PORT}`;
     this.connected = false;
 
     MongoClient.connect(url, (err, client) => {
       if (!err) {
         console.log('Mongo client ready');
-        this.db = client.db(DBClient.DB_DATABASE);
+        this.db = client.db(DB_DATABASE);
         this.connected = true;
       } else {
         console.log('Error connecting to Mongo');
