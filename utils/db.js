@@ -4,7 +4,7 @@ class DBClient {
   static DB_HOST = process.env.DB_HOST || 'localhost';
   static DB_PORT = process.env.DB_PORT || 27017;
   static DB_DATABASE = process.env.DB_DATABASE || 'files_manager';
-
+  
   constructor() {
     const url = `mongodb://${DBClient.DB_HOST}:${DBClient.DB_PORT}`;
     this.connected = false;
@@ -12,7 +12,7 @@ class DBClient {
     MongoClient.connect(url, (err, client) => {
       if (!err) {
         console.log('Mongo client ready');
-        this.db = client.db(this.dbName);
+        this.db = client.db(DBClient.DB_DATABASE);
         this.connected = true;
       } else {
         console.log('Error connecting to Mongo');
