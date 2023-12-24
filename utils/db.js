@@ -13,6 +13,7 @@ class DBClient {
       useUnifiedTopology: true
     });
     this.client.connect();
+    this.db = this.client.db();
     // this.client = new MongoClient.connect(url, (err, client) => {
     //   if (!err) {
     //     console.log('Mongo client ready');
@@ -29,13 +30,13 @@ class DBClient {
   }
 
   async nbUsers() {
-    const collection = this.client.collection('users');
+    const collection = this.db.collection('users');
     const count = await collection.countDocuments();
     return count;
   }
 
   async nbFiles() {
-    const collection = this.client.collection('files');
+    const collection = this.db.collection('files');
     const count = await collection.countDocuments();
     return count;
   }
@@ -61,7 +62,7 @@ class DBClient {
 
   async collection(name) {
     await this.waitConnection();
-    return this.client.collection(name);
+    return this.db.collection(name);
   }
 
   get client() {
