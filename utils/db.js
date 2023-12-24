@@ -6,7 +6,9 @@ class DBClient {
     const DB_PORT = process.env.DB_PORT || 27017;
     const DB_DATABASE = process.env.DB_DATABASE || 'files_manager';
     const url = `mongodb://${DB_HOST}:${DB_PORT}`;
+
     this.connected = false;
+
     MongoClient.connect(url, (err, client) => {
       if (!err) {
         console.log('Mongo client ready');
@@ -17,19 +19,23 @@ class DBClient {
       }
     });
   }
+
   isAlive() {
     return this.connected;
   }
+
   async nbUsers() {
     const collection = this.db.collection('users');
     const count = await collection.countDocuments();
     return count;
   }
+
   async nbFiles() {
     const collection = this.db.collection('files');
     const count = await collection.countDocuments();
     return count;
   }
+
   waitConnection() {
     return new Promise((resolve, reject) => {
       let i = 0;
@@ -48,10 +54,12 @@ class DBClient {
       repeatFct();
     });
   }
+
   async collection(name) {
     await this.waitConnection();
     return this.db.collection(name);
   }
+  
   get client() {
     return this.db;
   }
