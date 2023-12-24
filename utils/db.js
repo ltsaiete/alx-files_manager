@@ -8,15 +8,21 @@ class DBClient {
     const url = `mongodb://${DB_HOST}:${DB_PORT}`;
     this.connected = false;
 
-    MongoClient.connect(url, (err, client) => {
-      if (!err) {
-        console.log('Mongo client ready');
-        this.db = client.db(DB_DATABASE);
-        this.connected = true;
-      } else {
-        console.log('Error connecting to Mongo');
-      }
+    this.client = new MongoClient.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
     });
+    this.client.connect();
+    this.db = this.client.db(DB_DATABASE);
+    // this.client = new MongoClient.connect(url, (err, client) => {
+    //   if (!err) {
+    //     console.log('Mongo client ready');
+    //     this.db = client.db(DB_DATABASE);
+    //     this.connected = true;
+    //   } else {
+    //     console.log('Error connecting to Mongo');
+    //   }
+    // });
   }
 
   isAlive() {
