@@ -7,10 +7,9 @@ class AppController {
   }
 
   static async getStats(request, response) {
-    // const users = await dbClient.nbUsers();
-    // const files = await dbClient.nbFiles();
-    // return response.status(200).json({ users, files });
-    return response.status(200).json({ users: 4, files: 6 });
+    const users = await dbClient.nbUsers();
+    const files = await dbClient.nbFiles();
+    return response.status(200).json({ users, files });
   }
 }
 
