@@ -14,6 +14,9 @@ class UsersController {
 
     return response.status(201).json({ id: userId, email });
   }
+  async getMe(request, response) {
+    
+  }
 }
 
 export default new UsersController();

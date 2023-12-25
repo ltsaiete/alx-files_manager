@@ -4,12 +4,17 @@ GET http://localhost:5000/status
 
 GET http://localhost:5000/stats
 
-###
+### Users
 
 POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-	"email": "example6@mail.com",
+	"email": "lewis33@mail.com",
 	"password": "123456"
 }
+
+### Auth
+
+GET http://localhost:5000/connect
+Authorization: Basic bGV3aXNAbWFpbC5jb206MTIzNDU2
