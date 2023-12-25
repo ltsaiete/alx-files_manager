@@ -18,3 +18,8 @@ Content-Type: application/json
 
 GET http://localhost:5000/connect
 Authorization: Basic bGV3aXNAbWFpbC5jb206MTIzNDU2
+
+###
+
+GET http://localhost:5000/disconnect
+X-Token: 73e18052-bbb9-4d50-a008-cc6342854a48

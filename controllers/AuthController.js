@@ -22,5 +22,15 @@ export default class AuthController {
     return response.json({ token });
   }
 
-  static async getDisconnect(request, response) {}
+  static async getDisconnect(request, response) {
+    const token = request.headers['x-token'];
+    const key = `auth_${token}`;
+    const userId = await redisClient.get(key);
+
+    if (!userId) return response.status(401).send();
+
+    await redisClient.del(key);
+
+    return response.status(204).send();
+  }
 }
