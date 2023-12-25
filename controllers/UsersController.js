@@ -1,5 +1,4 @@
-import sha1 from 'sha1';
-import userRepository from '../repositories/User';
+// import userRepository from '../repositories/User';
 
 class UsersController {
   async postNew(request, response) {
@@ -8,10 +7,11 @@ class UsersController {
     if (!email) return response.status(400).json({ error: 'Missing email' });
     if (!password) return response.status(400).json({ error: 'Missing password' });
 
-    const userExists = await userRepository.getUserByEmail(email);
-    if (userExists) return response.status(400).json({ error: 'Already exist' });
+    // const userExists = await userRepository.getUserByEmail(email);
+    // if (userExists) return response.status(400).json({ error: 'Already exist' });
 
-    const userId = await userRepository.insertUser(email, password);
+    // const userId = await userRepository.insertUser(email, password);
+    const userId = '658942e64d983e1f24558d1a';
 
     return response.status(201).json({ id: userId, email });
   }

@@ -10,6 +10,6 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-	"email": "example3@mail.com",
+	"email": "example6@mail.com",
 	"password": "123456"
 }
