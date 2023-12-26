@@ -22,7 +22,8 @@ X-Token: bfbedb44-70d5-4a23-b133-41b1e22a63bb
 ### Auth
 
 GET http://localhost:5000/connect
-Authorization: Basic bGV3aXNAbWFpbC5jb206MTIzNDU2
+Authorization: Basic aGVsbG8gYmluYXJ5
+# Authorization: Basic bGV3aXNAbWFpbC5jb206MTIzNDU2
 
 ###
 

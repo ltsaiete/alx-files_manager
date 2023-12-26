@@ -5,10 +5,9 @@ export async function authMiddleware(request, response, next) {
   const key = `auth_${token}`;
   const userId = await redisClient.get(key);
 
-  if (!userId) return response.status(401).send();
+  if (!userId) throw new AppError(401, 'Unauthorized');
 
   request.userId = userId;
   request.authKey = key;
   next();
-	
 }
