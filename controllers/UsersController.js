@@ -1,15 +1,14 @@
-import AppError from '../errors/AppError';
 import userRepository from '../repositories/User';
 
 class UsersController {
   async postNew(request, response) {
     const { email, password } = request.body;
 
-    if (!email) throw new AppError(400, 'Missing email');
-    if (!password) throw new AppError(400, 'Missing password');
+    if (!email) return response.status(400).json({ error: 'Missing email' });
+    if (!password) return response.status(400).json({ error: 'Missing password' });
 
     const userExists = await userRepository.getUserByEmail(email);
-    if (userExists) throw new AppError(400, 'Already exist');
+    if (userExists) return response.status(400).json({ error: 'Already exist' });
 
     const userId = await userRepository.insertUser(email, password);
 
@@ -18,7 +17,7 @@ class UsersController {
 
   async getMe(request, response) {
     const user = await userRepository.getUserById(request.userId);
-    if (!user) throw new AppError(401, 'Unauthorized');
+    if (!user) return response.status(401).json({ error: 'Unauthorized' });
 
     delete user.password;
 

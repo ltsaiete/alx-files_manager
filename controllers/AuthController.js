@@ -2,7 +2,6 @@ import sha1 from 'sha1';
 import { v4 as uuidv4 } from 'uuid';
 import userRepository from '../repositories/User';
 import redisClient from '../utils/redis';
-import AppError from '../errors/AppError';
 
 export default class AuthController {
   static async getConnect(request, response) {
@@ -12,8 +11,8 @@ export default class AuthController {
 
     const user = await userRepository.getUserByEmail(email);
 
-    if (!user) throw new AppError(401, 'Unauthorized');
-    if (sha1(password) !== user.password) throw new AppError(401, 'Unauthorized');
+    if (!user) return response.status(401).json({ error: 'Unauthorized' });
+    if (sha1(password) !== user.password) return response.status(401).json({ error: 'Unauthorized' });
 
     const token = uuidv4();
     const key = `auth_${token}`;
