@@ -1,5 +1,6 @@
 import sha1 from 'sha1';
 import dbClient from '../utils/db';
+import { ObjectId } from 'mongodb';
 
 class UserRepository {
   constructor() {
@@ -10,6 +11,11 @@ class UserRepository {
 
   async getUserByEmail(email) {
     const user = await this.collection.findOne({ email });
+    return user;
+  }
+
+  async getUserById(id) {
+    const user = await this.collection.findOne({ _id: new ObjectId(id) });
     return user;
   }
 

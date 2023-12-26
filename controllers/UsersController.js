@@ -14,8 +14,14 @@ class UsersController {
 
     return response.status(201).json({ id: userId, email });
   }
+
   async getMe(request, response) {
-    
+    const user = await userRepository.getUserById(request.userId);
+    if (!user) return response.status(401).send();
+
+    delete user.password;
+
+    return response.json({ id: user._id.toString(), email: user.email });
   }
 }
 
