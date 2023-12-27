@@ -3,6 +3,7 @@ import AppController from '../controllers/AppController';
 import UsersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
 import { authMiddleware } from '../middlewares/auth';
+import FilesController from '../controllers/FilesController';
 
 const routes = Router();
 
@@ -24,5 +25,8 @@ routes.get('/users/me', UsersController.getMe);
 
 // Auth
 routes.get('/disconnect', AuthController.getDisconnect);
+
+// Files
+routes.post('/files', FilesController.postUpload);
 
 export default routes;
