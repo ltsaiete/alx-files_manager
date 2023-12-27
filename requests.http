@@ -1,5 +1,5 @@
 @url = http://localhost:5000
-@token = 2639434f-efc1-4c44-9dce-ad34d23496dd
+@token = 786d125b-d9ef-4656-8b60-8452c2ef5e6e
 
 ### App status
 
@@ -46,3 +46,13 @@ Content-Type: application/json
 	"type": "file",
 	"data": "SGVsbG8gV2Vic3RhY2shCg=="
 }
+
+###
+
+GET {{url}}/files/658b3a2629b1895218496ae4
+X-Token: {{token}}
+
+###
+
+GET {{url}}/files
+X-Token: {{token}}
