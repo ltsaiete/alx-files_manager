@@ -15,16 +15,16 @@ routes.get('/stats', AppController.getStats);
 routes.post('/users', UsersController.postNew);
 
 // // Auth
-// routes.get('/connect', AuthController.getConnect);
+routes.get('/connect', AuthController.getConnect);
 
 // // Authenticated routes
-// routes.use(authMiddleware);
+routes.use(authMiddleware);
 
 // // Users
-// routes.get('/users/me', UsersController.getMe);
+routes.get('/users/me', UsersController.getMe);
 
 // // Auth
-// routes.get('/disconnect', AuthController.getDisconnect);
+routes.get('/disconnect', AuthController.getDisconnect);
 
 // // Files
 // routes.post('/files', FilesController.postUpload);

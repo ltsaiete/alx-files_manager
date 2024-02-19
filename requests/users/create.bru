@@ -4,8 +4,16 @@ meta {
   seq: 1
 }
 
-get {
+post {
   url: {{url}}/users
-  body: none
+  body: json
   auth: none
+}
+
+body:json {
+  {
+    "email": "luis@files.com",
+    "password": "123456"
+  }
+  
 }
