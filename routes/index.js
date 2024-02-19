@@ -12,7 +12,7 @@ routes.get('/status', AppController.getStatus);
 routes.get('/stats', AppController.getStats);
 
 // Users
-// routes.post('/users', UsersController.postNew);
+routes.post('/users', UsersController.postNew);
 
 // // Auth
 // routes.get('/connect', AuthController.getConnect);
