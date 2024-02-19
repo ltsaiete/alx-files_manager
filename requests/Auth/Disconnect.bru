@@ -1,0 +1,20 @@
+meta {
+  name: Disconnect
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{url}}/disconnect
+  body: none
+  auth: none
+}
+
+headers {
+  X-Token: {{token}}
+}
+
+auth:basic {
+  username: luis@files.com
+  password: 123456
+}

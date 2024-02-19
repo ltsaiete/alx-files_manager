@@ -1,0 +1,25 @@
+meta {
+  name: Connect
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/connect
+  body: none
+  auth: basic
+}
+
+headers {
+  ~Authorization: luis@files.com:123456
+}
+
+auth:basic {
+  username: luis@files.com
+  password: 123456
+}
+
+script:post-response {
+  let data = res.getBody();
+  bru.setEnvVar("token", data.token);
+}

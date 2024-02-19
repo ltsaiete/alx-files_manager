@@ -1,0 +1,15 @@
+meta {
+  name: Show me
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{url}}/users/me
+  body: none
+  auth: none
+}
+
+headers {
+  X-Token: {{token}}
+}

@@ -27,7 +27,7 @@ routes.get('/users/me', UsersController.getMe);
 routes.get('/disconnect', AuthController.getDisconnect);
 
 // // Files
-// routes.post('/files', FilesController.postUpload);
+routes.post('/files', FilesController.postUpload);
 // routes.get('/files', FilesController.getIndex);
 // routes.get('/files/:id', FilesController.getShow);
 
