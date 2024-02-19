@@ -12,23 +12,23 @@ routes.get('/status', AppController.getStatus);
 routes.get('/stats', AppController.getStats);
 
 // Users
-routes.post('/users', UsersController.postNew);
+// routes.post('/users', UsersController.postNew);
 
-// Auth
-routes.get('/connect', AuthController.getConnect);
+// // Auth
+// routes.get('/connect', AuthController.getConnect);
 
-// Authenticated routes
-routes.use(authMiddleware);
+// // Authenticated routes
+// routes.use(authMiddleware);
 
-// Users
-routes.get('/users/me', UsersController.getMe);
+// // Users
+// routes.get('/users/me', UsersController.getMe);
 
-// Auth
-routes.get('/disconnect', AuthController.getDisconnect);
+// // Auth
+// routes.get('/disconnect', AuthController.getDisconnect);
 
-// Files
-routes.post('/files', FilesController.postUpload);
-routes.get('/files', FilesController.getIndex);
-routes.get('/files/:id', FilesController.getShow);
+// // Files
+// routes.post('/files', FilesController.postUpload);
+// routes.get('/files', FilesController.getIndex);
+// routes.get('/files/:id', FilesController.getShow);
 
 export default routes;
