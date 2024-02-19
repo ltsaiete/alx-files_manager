@@ -8,5 +8,6 @@ import redisClient from './utils/redis';
 
 	setTimeout(async () => {
 		console.log(await redisClient.get('myKey'));
+		console.log(redisClient.isAlive());
 	}, 1000 * 10);
 })();
