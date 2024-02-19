@@ -1,0 +1,23 @@
+meta {
+  name: Show
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{url}}/files
+  body: none
+  auth: none
+}
+
+headers {
+  X-Token: {{token}}
+}
+
+body:json {
+  {
+    "name": "myText.txt",
+    "type": "file",
+    "data": "SGVsbG8gV2Vic3RhY2shCg=="
+  }
+}

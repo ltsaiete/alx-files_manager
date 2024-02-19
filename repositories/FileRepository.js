@@ -14,10 +14,14 @@ class FileRepository {
   }
 
   async find({ parentId, page, userId }) {
+    console.log(userId);
     const files = await this.collection
       .aggregate([
         {
-          $match: { userId: new ObjectId(userId), parentId: new ObjectId(parentId) }
+          $match: {
+            userId: new ObjectId(userId),
+            parentId: parentId == 0 ? 0 : new ObjectId(parentId)
+          }
         },
         {
           $project: {
@@ -42,7 +46,14 @@ class FileRepository {
   }
 
   async create({ name, type, parentId = 0, isPublic = false, userId, localPath }) {
-    const file = { name, type, parentId: new ObjectId(parentId), isPublic, userId: new ObjectId(userId), localPath };
+    const file = {
+      name,
+      type,
+      parentId: parentId == 0 ? 0 : new ObjectId(parentId),
+      isPublic,
+      userId: new ObjectId(userId),
+      localPath
+    };
     const result = await this.collection.insertOne(file);
     return result.insertedId;
   }
