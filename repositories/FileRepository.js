@@ -57,6 +57,11 @@ class FileRepository {
     const result = await this.collection.insertOne(file);
     return result.insertedId;
   }
+
+  async update({ _id, isPublic }) {
+    await this.collection.updateOne({ _id: new ObjectId(_id) }, { $set: { isPublic } });
+
+  }
 }
 
 const fileRepository = new FileRepository();

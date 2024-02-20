@@ -61,4 +61,32 @@ export default class FilesController {
 
     return response.json(files);
   }
+
+  static async putPublish(request, response) {
+    const userId = request.userId;
+    const { id } = request.params;
+    const file = await fileRepository.findById(id);
+
+    if (!file || file.userId.toString() !== userId) return response.status(404).json({ error: 'Not found' });
+
+    file.isPublic = true;
+    file.id = file._id;
+    await fileRepository.update(file);
+
+    return response.json(file);
+  }
+  
+  static async putUnpublish(request, response) {
+    const userId = request.userId;
+    const { id } = request.params;
+    const file = await fileRepository.findById(id);
+
+    if (!file || file.userId.toString() !== userId) return response.status(404).json({ error: 'Not found' });
+
+    file.isPublic = false;
+    file.id = file._id;
+    await fileRepository.update(file);
+
+    return response.json(file);
+  }
 }
