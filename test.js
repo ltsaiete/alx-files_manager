@@ -8,7 +8,7 @@ import sha1 from 'sha1';
 
 chai.use(chaiHttp);
 
-describe('GET /connect', () => {
+describe('gET /connect', () => {
   let testClientDb;
   let testRedisClient;
   let redisDelAsync;
@@ -20,9 +20,7 @@ describe('GET /connect', () => {
   let initialUserPwd = null;
   let initialUserId = null;
 
-  const fctRandomString = () => {
-    return Math.random().toString(36).substring(2, 15);
-  };
+  const fctRandomString = () => Math.random().toString(36).substring(2, 15);
   const fctRemoveAllRedisKeys = async () => {
     const keys = await redisKeysAsync('auth_*');
     keys.forEach(async (key) => {
@@ -34,7 +32,7 @@ describe('GET /connect', () => {
     const dbInfo = {
       host: process.env.DB_HOST || 'localhost',
       port: process.env.DB_PORT || '27017',
-      database: process.env.DB_DATABASE || 'files_manager'
+      database: process.env.DB_DATABASE || 'files_manager',
     };
     return new Promise((resolve) => {
       MongoClient.connect(`mongodb://${dbInfo.host}:${dbInfo.port}/${dbInfo.database}`, async (err, client) => {
@@ -46,7 +44,7 @@ describe('GET /connect', () => {
         initialUserPwd = fctRandomString();
         initialUser = {
           email: `${fctRandomString()}@me.com`,
-          password: sha1(initialUserPwd)
+          password: sha1(initialUserPwd),
         };
         const createdDocs = await testClientDb.collection('users').insertOne(initialUser);
         if (createdDocs && createdDocs.ops.length > 0) {
@@ -70,8 +68,8 @@ describe('GET /connect', () => {
     fctRemoveAllRedisKeys();
   });
 
-  it('GET /connect with invalid Base64 content', (done) => {
-    const basicAuth = `Basic ${Buffer.from(`hello`, 'binary').toString('base64')}`;
+  it('gET /connect with invalid Base64 content', () => new Promise((done) => {
+    const basicAuth = `Basic ${Buffer.from('hello', 'binary').toString('base64')}`;
     chai
       .request('http://localhost:5000')
       .get('/connect')
@@ -88,5 +86,5 @@ describe('GET /connect', () => {
 
         done();
       });
-  }).timeout(30000);
+  })).timeout(30000);
 });

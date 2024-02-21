@@ -6,109 +6,118 @@ import { FOLDER_PATH } from '../utils/env';
 import { getUserId } from '../middlewares/auth';
 
 export default class FilesController {
-	static async postUpload(request, response) {
-		const userId = request.userId;
-		const { name, type, parentId = 0, isPublic = false, data } = request.body;
+  static async postUpload(request, response) {
+    const { userId } = request;
+    const {
+      name, type, parentId = 0, isPublic = false, data,
+    } = request.body;
 
-		if (!name) return response.status(400).json({ error: 'Missing name' });
-		if (!type || (type !== 'folder' && type !== 'file' && type !== 'image'))
-			return response.status(400).json({ error: 'Missing type' });
-		if (!data && type !== 'folder') return response.status(400).json({ error: 'Missing data' });
+    if (!name) return response.status(400).json({ error: 'Missing name' });
+    if (!type || (type !== 'folder' && type !== 'file' && type !== 'image')) return response.status(400).json({ error: 'Missing type' });
+    if (!data && type !== 'folder') return response.status(400).json({ error: 'Missing data' });
 
-		if (parentId && parentId != 0) {
-			const parentFile = await fileRepository.findById(parentId);
-			if (!parentFile) return response.status(400).json({ error: 'Parent not found' });
-			if (parentFile.type !== 'folder') return response.status(400).json({ error: 'Parent is not a folder' });
-		}
+    if (parentId && Number(parentId) !== 0) {
+      const parentFile = await fileRepository.findById(parentId);
+      if (!parentFile) return response.status(400).json({ error: 'Parent not found' });
+      if (parentFile.type !== 'folder') return response.status(400).json({ error: 'Parent is not a folder' });
+    }
 
-		if (type === 'folder') {
-			const id = await fileRepository.create({ name, type, parentId, isPublic, userId });
-			return response.status(201).json({ name, type, parentId, isPublic, userId, id });
-		}
+    if (type === 'folder') {
+      const id = await fileRepository.create({
+        name, type, parentId, isPublic, userId,
+      });
+      return response.status(201).json({
+        name, type, parentId, isPublic, userId, id,
+      });
+    }
 
-		const localPath = resolve(FOLDER_PATH, uuidv4());
-		const content = Buffer.from(data, 'base64');
+    const localPath = resolve(FOLDER_PATH, uuidv4());
+    const content = Buffer.from(data, 'base64');
 
-		await fs.promises.mkdir(resolve(FOLDER_PATH), { recursive: true });
+    await fs.promises.mkdir(resolve(FOLDER_PATH), { recursive: true });
 
-		await fs.promises.writeFile(localPath, content);
+    await fs.promises.writeFile(localPath, content);
 
-		const id = await fileRepository.create({ name, type, parentId, isPublic, userId, localPath });
-		return response.status(201).json({ name, type, parentId, isPublic, userId, id });
-	}
+    const id = await fileRepository.create({
+      name, type, parentId, isPublic, userId, localPath,
+    });
+    return response.status(201).json({
+      name, type, parentId, isPublic, userId, id,
+    });
+  }
 
-	static async getShow(request, response) {
-		const userId = request.userId;
-		const { id } = request.params;
-		const file = await fileRepository.findById(id);
+  static async getShow(request, response) {
+    const { userId } = request;
+    const { id } = request.params;
+    const file = await fileRepository.findById(id);
 
-		if (!file || file.userId.toString() !== userId) return response.status(404).json({ error: 'Not found' });
+    if (!file || file.userId.toString() !== userId) return response.status(404).json({ error: 'Not found' });
 
-		file.id = file._id.toString();
-		delete file._id;
+    file.id = file._id.toString();
+    delete file._id;
 
-		return response.json(file);
-	}
-	static async getIndex(request, response) {
-		const userId = request.userId;
-		const { parentId = 0, page = 0 } = request.query;
+    return response.json(file);
+  }
 
-		if (parentId != 0) {
-			const parentFolder = await fileRepository.findById(parentId);
-			if (parentFolder.userId.toString() !== userId) return response.json([]);
-		}
+  static async getIndex(request, response) {
+    const { userId } = request;
+    const { parentId = 0, page = 0 } = request.query;
 
-		const files = await fileRepository.find({ parentId, userId, page });
+    if (parentId !== 0) {
+      const parentFolder = await fileRepository.findById(parentId);
+      if (parentFolder.userId.toString() !== userId) return response.json([]);
+    }
 
-		return response.json(files);
-	}
+    const files = await fileRepository.find({ parentId, userId, page });
 
-	static async putPublish(request, response) {
-		const userId = request.userId;
-		const { id } = request.params;
-		const file = await fileRepository.findById(id);
+    return response.json(files);
+  }
 
-		if (!file || file.userId.toString() !== userId) return response.status(404).json({ error: 'Not found' });
+  static async putPublish(request, response) {
+    const { userId } = request;
+    const { id } = request.params;
+    const file = await fileRepository.findById(id);
 
-		file.isPublic = true;
-		file.id = file._id;
-		await fileRepository.update(file);
+    if (!file || file.userId.toString() !== userId) return response.status(404).json({ error: 'Not found' });
 
-		return response.json(file);
-	}
+    file.isPublic = true;
+    file.id = file._id;
+    await fileRepository.update(file);
 
-	static async putUnpublish(request, response) {
-		const userId = request.userId;
-		const { id } = request.params;
-		const file = await fileRepository.findById(id);
+    return response.json(file);
+  }
 
-		if (!file || file.userId.toString() !== userId) return response.status(404).json({ error: 'Not found' });
+  static async putUnpublish(request, response) {
+    const { userId } = request;
+    const { id } = request.params;
+    const file = await fileRepository.findById(id);
 
-		file.isPublic = false;
-		file.id = file._id;
-		await fileRepository.update(file);
+    if (!file || file.userId.toString() !== userId) return response.status(404).json({ error: 'Not found' });
 
-		return response.json(file);
-	}
+    file.isPublic = false;
+    file.id = file._id;
+    await fileRepository.update(file);
 
-	static async getFile(request, response) {
-		const { id } = request.params;
-		const userId = await getUserId(request);
+    return response.json(file);
+  }
 
-		const file = await fileRepository.findById(id);
-		if (!file) return response.status(404).json({ error: 'Not found' });
+  static async getFile(request, response) {
+    const { id } = request.params;
+    const userId = await getUserId(request);
 
-		if (!file.isPublic && (!userId || file.userId.toString() !== userId))
-			return response.status(404).json({ error: 'Not found' });
-		if (file.type === 'folder') return response.status(400).json({ error: "A folder doesn't have content" });
+    const file = await fileRepository.findById(id);
+    if (!file) return response.status(404).json({ error: 'Not found' });
 
-		try {
-			const data = await fs.promises.readFile(file.localPath);
-			const content = data.toString();
+    if (!file.isPublic && (!userId || file.userId.toString() !== userId)) return response.status(404).json({ error: 'Not found' });
+    if (file.type === 'folder') return response.status(400).json({ error: "A folder doesn't have content" });
 
-			return response.send(content);
-		} catch (error) {
-			return response.status(404).json({ error: 'Not found' });
-		}
-	}
+    try {
+      const data = await fs.promises.readFile(file.localPath);
+      const content = data.toString();
+
+      return response.send(content);
+    } catch (error) {
+      return response.status(404).json({ error: 'Not found' });
+    }
+  }
 }

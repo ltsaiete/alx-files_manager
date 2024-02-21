@@ -3,8 +3,8 @@ import chaiHttp from 'chai-http';
 
 chai.use(chaiHttp);
 
-describe('GET /status', () => {
-  it('GET /status exists', (done) => {
+describe('gET /status', () => {
+  it('gET /status exists', () => new Promise((done) => {
     chai
       .request('http://localhost:5000')
       .get('/status')
@@ -13,5 +13,5 @@ describe('GET /status', () => {
         chai.expect(res).to.have.status(200);
         done();
       });
-  }).timeout(30000);
+  })).timeout(30000);
 });

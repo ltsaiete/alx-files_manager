@@ -1,7 +1,7 @@
 import userRepository from '../repositories/User';
 
 class UsersController {
-  async postNew(request, response) {
+  static async postNew(request, response) {
     const { email, password } = request.body;
 
     if (!email) return response.status(400).json({ error: 'Missing email' });
@@ -15,7 +15,7 @@ class UsersController {
     return response.status(201).json({ id: userId, email });
   }
 
-  async getMe(request, response) {
+  static async getMe(request, response) {
     const user = await userRepository.getUserById(request.userId);
     if (!user) return response.status(401).json({ error: 'Unauthorized' });
 
@@ -25,4 +25,4 @@ class UsersController {
   }
 }
 
-export default new UsersController();
+export default UsersController;

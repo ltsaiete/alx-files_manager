@@ -1,5 +1,5 @@
-import dbClient from '../utils/db';
 import { ObjectId } from 'mongodb';
+import dbClient from '../utils/db';
 
 class FileRepository {
   constructor() {
@@ -20,8 +20,8 @@ class FileRepository {
         {
           $match: {
             userId: new ObjectId(userId),
-            parentId: parentId == 0 ? 0 : new ObjectId(parentId)
-          }
+            parentId: Number(parentId) === 0 ? 0 : new ObjectId(parentId),
+          },
         },
         {
           $project: {
@@ -31,28 +31,30 @@ class FileRepository {
             parentId: 1,
             isPublic: 1,
             userId: 1,
-            localPath: 1
-          }
+            localPath: 1,
+          },
         },
         {
-          $skip: page * 20
+          $skip: page * 20,
         },
         {
-          $limit: 20
-        }
+          $limit: 20,
+        },
       ])
       .toArray();
     return files;
   }
 
-  async create({ name, type, parentId = 0, isPublic = false, userId, localPath }) {
+  async create({
+    name, type, parentId = 0, isPublic = false, userId, localPath,
+  }) {
     const file = {
       name,
       type,
-      parentId: parentId == 0 ? 0 : new ObjectId(parentId),
+      parentId: Number(parentId) === 0 ? 0 : new ObjectId(parentId),
       isPublic,
       userId: new ObjectId(userId),
-      localPath
+      localPath,
     };
     const result = await this.collection.insertOne(file);
     return result.insertedId;
@@ -60,7 +62,6 @@ class FileRepository {
 
   async update({ _id, isPublic }) {
     await this.collection.updateOne({ _id: new ObjectId(_id) }, { $set: { isPublic } });
-
   }
 }
 

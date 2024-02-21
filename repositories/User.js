@@ -1,6 +1,6 @@
 import sha1 from 'sha1';
-import dbClient from '../utils/db';
 import { ObjectId } from 'mongodb';
+import dbClient from '../utils/db';
 
 class UserRepository {
   constructor() {
@@ -20,8 +20,8 @@ class UserRepository {
   }
 
   async insertUser(email, password) {
-    const password_hash = sha1(password);
-    const result = await this.collection.insertOne({ email, password: password_hash });
+    const passwordHash = sha1(password);
+    const result = await this.collection.insertOne({ email, password: passwordHash });
     return result.insertedId;
   }
 }
