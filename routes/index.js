@@ -17,6 +17,9 @@ routes.post('/users', UsersController.postNew);
 // // Auth
 routes.get('/connect', AuthController.getConnect);
 
+// Files
+routes.get('/files/:id/data', FilesController.getFile);
+
 // // Authenticated routes
 routes.use(authMiddleware);
 

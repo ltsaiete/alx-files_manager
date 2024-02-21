@@ -3,6 +3,7 @@ import fs from 'fs';
 import { resolve } from 'path';
 import fileRepository from '../repositories/FileRepository';
 import { FOLDER_PATH } from '../utils/env';
+import { getUserId } from '../middlewares/auth';
 
 export default class FilesController {
   static async postUpload(request, response) {
@@ -75,7 +76,7 @@ export default class FilesController {
 
     return response.json(file);
   }
-  
+
   static async putUnpublish(request, response) {
     const userId = request.userId;
     const { id } = request.params;
@@ -86,6 +87,20 @@ export default class FilesController {
     file.isPublic = false;
     file.id = file._id;
     await fileRepository.update(file);
+
+    return response.json(file);
+  }
+
+  static async getFile(request, response) {
+    const { id } = request.params;
+    const userId = await getUserId(request);
+
+    const file = await fileRepository.findById(id);
+    if (!file) return response.status(400).json({ error: 'Not found' });
+
+    if (!file.isPublic && (!userId || file.userId.toString() !== userId))
+      return response.status(400).json({ error: 'Not found' });
+    if (file.type === 'folder') return response.status(400).json({ error: "A folder doesn't have content" });
 
     return response.json(file);
   }

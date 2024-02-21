@@ -1,0 +1,23 @@
+meta {
+  name: getFile
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{url}}/files/65d35447b70f7e0e00e57b45/unpublish
+  body: none
+  auth: none
+}
+
+headers {
+  X-Token: {{token}}
+}
+
+body:json {
+  {
+    "name": "myText.txt",
+    "type": "file",
+    "data": "SGVsbG8gV2Vic3RhY2shCg=="
+  }
+}
