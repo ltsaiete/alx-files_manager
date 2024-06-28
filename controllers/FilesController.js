@@ -2,18 +2,18 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import { resolve } from 'path';
 import fileRepository from '../repositories/FileRepository';
+import userRepository from '../repositories/User';
 import { FOLDER_PATH } from '../utils/env';
 import { getUserId } from '../middlewares/auth';
 
 export default class FilesController {
   static async postUpload(request, response) {
     const { userId } = request;
-    const {
-      name, type, parentId = 0, isPublic = false, data,
-    } = request.body;
+    const { name, type, parentId = 0, isPublic = false, data } = request.body;
 
     if (!name) return response.status(400).json({ error: 'Missing name' });
-    if (!type || (type !== 'folder' && type !== 'file' && type !== 'image')) return response.status(400).json({ error: 'Missing type' });
+    if (!type || (type !== 'folder' && type !== 'file' && type !== 'image'))
+      return response.status(400).json({ error: 'Missing type' });
     if (!data && type !== 'folder') return response.status(400).json({ error: 'Missing data' });
 
     if (parentId && Number(parentId) !== 0) {
@@ -24,10 +24,19 @@ export default class FilesController {
 
     if (type === 'folder') {
       const id = await fileRepository.create({
-        name, type, parentId, isPublic, userId,
+        name,
+        type,
+        parentId,
+        isPublic,
+        userId
       });
       return response.status(201).json({
-        name, type, parentId, isPublic, userId, id,
+        name,
+        type,
+        parentId,
+        isPublic,
+        userId,
+        id
       });
     }
 
@@ -39,24 +48,37 @@ export default class FilesController {
     await fs.promises.writeFile(localPath, content);
 
     const id = await fileRepository.create({
-      name, type, parentId, isPublic, userId, localPath,
+      name,
+      type,
+      parentId,
+      isPublic,
+      userId,
+      localPath
     });
     return response.status(201).json({
-      name, type, parentId, isPublic, userId, id,
+      name,
+      type,
+      parentId,
+      isPublic,
+      userId,
+      id
     });
   }
 
   static async getShow(request, response) {
+    const fileId = request.params.id;
+
     const { userId } = request;
-    const { id } = request.params;
-    const file = await fileRepository.findById(id);
 
-    if (!file || file.userId.toString() !== userId) return response.status(404).json({ error: 'Not found' });
+    const user = await userRepository.getUserById(userId);
 
-    file.id = file._id.toString();
-    delete file._id;
+    if (!user) return response.status(401).send({ error: 'Unauthorized' });
 
-    return response.json(file);
+    const result = fileRepository.findByIdAndUser(fileId, userId);
+
+    if (!result) return response.status(404).send({ error: 'Not found' });
+
+    return response.status(200).send(result);
   }
 
   static async getIndex(request, response) {
@@ -108,7 +130,8 @@ export default class FilesController {
     const file = await fileRepository.findById(id);
     if (!file) return response.status(404).json({ error: 'Not found' });
 
-    if (!file.isPublic && (!userId || file.userId.toString() !== userId)) return response.status(404).json({ error: 'Not found' });
+    if (!file.isPublic && (!userId || file.userId.toString() !== userId))
+      return response.status(404).json({ error: 'Not found' });
     if (file.type === 'folder') return response.status(400).json({ error: "A folder doesn't have content" });
 
     try {

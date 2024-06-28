@@ -13,15 +13,19 @@ class FileRepository {
     return file;
   }
 
+  async findByIdAndUser(id, userId) {
+    const file = await this.collection.findOne({ _id: new ObjectId(id), userId: new ObjectId(userId) });
+    return file;
+  }
+
   async find({ parentId, page, userId }) {
-    console.log(userId);
     const files = await this.collection
       .aggregate([
         {
           $match: {
             userId: new ObjectId(userId),
-            parentId: Number(parentId) === 0 ? 0 : new ObjectId(parentId),
-          },
+            parentId: Number(parentId) === 0 ? 0 : new ObjectId(parentId)
+          }
         },
         {
           $project: {
@@ -31,30 +35,28 @@ class FileRepository {
             parentId: 1,
             isPublic: 1,
             userId: 1,
-            localPath: 1,
-          },
+            localPath: 1
+          }
         },
         {
-          $skip: page * 20,
+          $skip: page * 20
         },
         {
-          $limit: 20,
-        },
+          $limit: 20
+        }
       ])
       .toArray();
     return files;
   }
 
-  async create({
-    name, type, parentId = 0, isPublic = false, userId, localPath,
-  }) {
+  async create({ name, type, parentId = 0, isPublic = false, userId, localPath }) {
     const file = {
       name,
       type,
       parentId: Number(parentId) === 0 ? 0 : new ObjectId(parentId),
       isPublic,
       userId: new ObjectId(userId),
-      localPath,
+      localPath
     };
     const result = await this.collection.insertOne(file);
     return result.insertedId;
